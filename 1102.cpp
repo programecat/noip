@@ -20,3 +20,4 @@ int main()
 	}
 	cout<<d;
  } 
+// where are other practices?
