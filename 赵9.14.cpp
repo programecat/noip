@@ -65,12 +65,12 @@ int main()
 	cin.getline(a,101);
 	cin.getline(b,101);
 	char a1[101],b1[101];
-	int n=0,m=0;
+	int n=0,m=0;  //在定义一个变量的时候给它一个初始值，是很好的习惯 --by teacherweng
 	for(int i=0;i<strlen(a);i++)
 	{
 		if(a[i] !=' ')
 		{
-			a1[n]=a[i];
+			a1[n]=a[i]; //逻辑很清楚，73和74行也可以合并写成 a1[n++] = a[i]; -- by teacherweng
 			n++;
 		}
 	}
@@ -84,5 +84,7 @@ int main()
 	}
 	strlwr(a1);
 	strlwr(b1);
+	//根据题目，这里还需要再比较一下a1和b1: strcmp(a1, b1) 两者相等返回0 -- by teacherweng
+	
 	cout<<a1<<endl<<b1<<endl;
 }
