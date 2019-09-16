@@ -10,7 +10,7 @@ int main(){
 	char a1[101],b1[101];
 	for (int i = 0; i < strlen(a);i++){
 		if(a[i]==' '){
-			i1++; 
+			i1++;  // 这行应该删掉，想想为什么？ 
 		}
 		else{
 			a1[i1]=a[i];
@@ -18,10 +18,7 @@ int main(){
 		}
 	}
 	for (int j = 0; j < strlen(b);j++){
-		if(b[j]==' '){
-			j1++;
-		}
-		else{
+		if(b[j] ！=' '){  // 判断两个字符不相等用 ！=
 			b1[j1]=b[j];
 			j1++;
 		}
