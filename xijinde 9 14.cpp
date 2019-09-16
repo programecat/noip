@@ -10,7 +10,7 @@
 //	
 //	
 //	for (int b=0;b<m;b++){
-//		if(a[b] == m)
+//		if(a[b] == m)   // 记住if语句后面也要尽量加上两个大括号 -- by teacherweng
 //			g++;
 //			cout<<g;
 //	}
@@ -70,7 +70,7 @@ int main(){
 	
 	char a1[101],b1[101];
 	for(int i=0;i<strlen(a);i++){
-		if(a[i]==' '){
+		if(a[i]==' '){         // 这里的73到78行的if语句体里面是空的，所以我们可以改成 if (a[i] != ' ') { a1[h++] = a[i]; }
 		}
 		else{
 			a1[h]=a[i];
