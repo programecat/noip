@@ -55,7 +55,7 @@
   
   - 前中后序列的遍历 （深度优先遍历）
   
-  ![](http://pyfi676fl.bkt.clouddn.com/tree1.bmp)
+  ![](http://pyfi676fl.bkt.clouddn.com/tree1.jpg)
   
   
 
@@ -88,8 +88,7 @@
     
 
     
-
-    <img src="http://pyfi676fl.bkt.clouddn.com/%E5%8F%8C%E9%93%BE%E8%A1%A8.bmp" style="zoom:200%;" />
+     ![](http://pyfi676fl.bkt.clouddn.com/%E5%8F%8C%E9%93%BE%E8%A1%A8.jpg)
 
   
 
@@ -226,7 +225,7 @@
 
 求从A到E的最短路径：
 
-<img src="http://pyfi676fl.bkt.clouddn.com/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84.png" style="zoom:200%;" />
+<img src="http://pyfi676fl.bkt.clouddn.com/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84.jpg" style="zoom:200%;" />
 
 
 
