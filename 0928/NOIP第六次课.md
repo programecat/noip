@@ -226,7 +226,7 @@
 
 求从A到E的最短路径：
 
-![](http://pyfi676fl.bkt.clouddn.com/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84.png)
+<img src="http://pyfi676fl.bkt.clouddn.com/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84.png" style="zoom:200%;" />
 
 
 
