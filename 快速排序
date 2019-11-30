@@ -1,0 +1,55 @@
+#include<iostream>
+using namespace std;
+
+int a[100]={8,10,2,3,6,1,5};
+
+
+void printArray(int A[]){
+	for (int i = 0;i<7;i++){
+		cout << a[i] << " ";
+	}
+	cout<<endl;
+}
+
+void swap(int &a,int &b){
+	int t = a;
+	a = b;
+	b = t;
+}
+
+int partition(int A[] , int p , int r){
+	int pivot = A[r]; 	//选择最后面的一个元素作为轴心值
+	int i = p; 	//A[p,i-1]作为已'排序'区间 
+	
+	for (int j = p;j < r;j++){
+		if (A[j] < pivot) {
+			swap(A[i],A[j]);
+			i++;
+		}
+	} 
+	swap(A[r],A[i]);
+	return i;
+	
+}
+	//快速排序递归函数，p,r为下标 
+void quick_sort(int A[],int p,int r){ 
+	if(p >= r) return;
+	
+	int q = partition(A,p,r);
+	printArray(A);//方便观察 （可删） 
+	quick_sort(A,p,q-1);		//左区排序 
+	quick_sort(A,q+1,r);    //右区排序 
+	
+	 
+}
+
+int main(){
+	int n = 7;
+	quick_sort(a,0,n-1);
+	
+	for (int i = 0;i<n;i++){
+		cout << a[i] << " ";
+	}
+	cout<<endl;
+	return 0;
+}
