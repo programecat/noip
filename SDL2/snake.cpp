@@ -3,10 +3,7 @@
 #include <math.h>
 #include <deque>
 #include <SDL2/SDL.h>
-#include <SDL_image.h>
 using namespace std;
-
-/* run this program using the console pauser or add your own getch, system("pause") or input loop */
 
 
 const int maxw = 800;
@@ -18,26 +15,29 @@ SDL_Window *window;
 typedef struct {
 	SDL_Rect head;
 	SDL_Texture *texture;
-	int s;
+	int s; //每节身体的边长 
 	int direction;
-	deque<SDL_Rect> sp;
+	deque<SDL_Rect> sp; //deque我们暂时没有讲到，其实我们也可以用数组来代替 
 }Snake;
 
 Snake snake;
-SDL_Rect foodRect{300,500,20,20};
+SDL_Rect foodRect = {300,500,20,20};  //SDL_Rect代表一个矩形，有四个属性，分别是左顶点的x,y坐标和长度和宽度 
 
 int printFood()
 {
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0xFF); //食物颜色 
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0xFF); //食物的颜色是黑色 
 	SDL_RenderFillRect(renderer, &foodRect);
-	SDL_SetRenderDrawColor(renderer, 0, 0x90, 0x70, 0xFF);//背景颜色,四个参数为 渲染器ren,r,g,b,a(透明度)
 }
 
+//初始化小蛇，有5节身体 
 void initSnake() {
 	snake.s = 20;
 	snake.direction = 1;
+	snake.head.w = snake.s;
+	snake.head.h = snake.s;
+	snake.head.x = 300;
 	for (int i = 0; i < 5; i++) {
-		snake.head = {300, 400 + snake.s * i, snake.s, snake.s};
+		snake.head.y = 400 + snake.s * i;
 		snake.sp.push_front(snake.head);
 	}
 }
@@ -51,13 +51,13 @@ int printSnake()//画蛇
 	return 1;
 }
 
+//蛇行走原理:蛇头前加1节,蛇尾减少1节
 int UpMove()//上移
 {
 	snake.head.y -= snake.s;
 	snake.sp.push_front(snake.head);//蛇头前加1节
 	snake.sp.pop_back();//蛇尾减少1节
 	snake.direction=1;
-	//蛇行走原理:蛇头前加1节,蛇尾减少1节
 }
 int DownMove()//下移
 {
@@ -81,29 +81,29 @@ int RightMove()//右移
 	snake.direction=4;
 }
 
-int addLong()//蛇增长
+void addLong()//蛇增长
 {
-	if(snake.direction==1)
-	{
+	switch (snake.direction) {
+		case 1:
 		snake.head.y-=snake.s;
 		snake.sp.push_front(snake.head);
-		//蛇头前增加1节
-	}
-	if(snake.direction==2)
-	{
+		break;
+		case 2:	
 		snake.head.y += snake.s;
 		snake.sp.push_front(snake.head);
-	}
-	
-	if(snake.direction==3)
-	{
+		break;
+		case 3:
+			
 		snake.head.x-=snake.s;
 		snake.sp.push_front(snake.head);
-	}
-	if(snake.direction==4)
-	{
+		break;
+		case 4:
+			
 		snake.head.x += snake.s;
 		snake.sp.push_front(snake.head);
+		break;
+		default:
+			break;
 	}
 }
 
@@ -115,11 +115,6 @@ int init() {
 
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
         printf("%s\n", SDL_GetError());
-        result = 0;
-    }
-
-    if (IMG_Init(IMG_INIT_PNG) < 0) {
-        printf("%s\n", IMG_GetError());
         result = 0;
     }
 
@@ -151,9 +146,9 @@ int loadAssets(const char* file) {
 
     int result = 1;
     
-    SDL_Surface* s = IMG_Load(file);
+    SDL_Surface* s = SDL_LoadBMP(file);
     if (s == NULL) {
-        printf("IMG Error: %s\n", IMG_GetError());
+        printf("IMG Error: %s\n", SDL_GetError());
         return 0;
     }
 
@@ -167,6 +162,41 @@ int loadAssets(const char* file) {
     return result;
 }
 
+bool canEatFood() {
+	if ((snake.direction == 1 && snake.head.y - snake.s == foodRect.y && snake.head.x == foodRect.x)
+		|| (snake.direction == 2 && snake.head.y + snake.s == foodRect.y && snake.head.x == foodRect.x)
+		|| (snake.direction == 3 && snake.head.x - snake.s == foodRect.x && snake.head.y == foodRect.y)
+		|| (snake.direction == 4 && snake.head.x + snake.s == foodRect.x && snake.head.y == foodRect.y)) {
+		addLong();
+		SDL_Log("direction is %d, x = %d, y = %d", snake.direction, snake.head.x, snake.head.y);
+		return true;
+	}
+	return false;
+} 
+
+void moveSnake() {
+	switch (snake.direction) {
+		case 1:
+		UpMove();
+		break;
+
+		case 2:
+		DownMove();
+		break;
+
+		case 3:
+		LeftMove();
+		break;
+
+		case 4:
+		RightMove();
+		break;
+
+		default:
+		break;
+	}
+}
+
 
 int main(int argc, char** argv) {
     if (!init()) {
@@ -175,7 +205,7 @@ int main(int argc, char** argv) {
     } 
 	else 
 	{
-       if (!loadAssets("1.jpg")) {
+       if (!loadAssets("snake.bmp")) {
            printf("Could not load assets\n");
            return 2;
        }
@@ -203,37 +233,49 @@ int main(int argc, char** argv) {
 					switch( event.key.keysym.sym )
 					{
 						case SDLK_UP:
-						UpMove();
+						snake.direction = 1;
 						break;
 
 						case SDLK_DOWN:
-          				DownMove();
+          				snake.direction = 2;
           				break;
 
 						case SDLK_LEFT:
-						LeftMove();
+						snake.direction = 3;
 						break;
 
 						case SDLK_RIGHT:
-						RightMove();
+						snake.direction = 4;
 						break;
 
 						default:
 						break;
 					}
+					
+					SDL_Log("direction change to %d", snake.direction);
 				}
            }
 
-           // render
-           SDL_RenderClear(renderer);
-
+           // 设置背景色 
+        	SDL_SetRenderDrawColor(renderer, 0, 0x90, 0x70, 0xFF);//背景颜色,四个参数为 渲染器,r,g,b,a(透明度)
+        	SDL_RenderClear(renderer);
+           
+       		moveSnake();
+       		SDL_Log("snake head x = %d, y = %d, direction = %d", snake.head.x, snake.head.y, snake.direction);
+		   
+           if (canEatFood()) {
+           		//食物的位置变化 
+        		foodRect.x = (rand() % (maxw/20)) * 20;
+        		foodRect.y = (rand() % (maxh/20)) * 20;
+        		SDL_Log("food x = %d, y = %d", foodRect.x, foodRect.y);
+		   }
+		   
+		   printFood();
            printSnake();
-           printFood();
+		   SDL_RenderPresent(renderer);
+			SDL_Delay(250); //这里控制帧速，delay的时间越短，小蛇速度越快
+	   }
 
-           SDL_RenderPresent(renderer);
-       }
-
-       IMG_Quit();
 	   SDL_DestroyRenderer(renderer);
 	   SDL_DestroyWindow(window);
 	   SDL_Quit();
